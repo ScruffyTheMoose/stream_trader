@@ -8,9 +8,11 @@ import datetime
 
 class Bot:
 
+
     def __init__(self) -> None:
         """Constructor"""
         self.start_time = time.time()
+
 
     def getUptime(self) -> None:
         uptime_sec = time.time() - self.start_time
@@ -21,7 +23,8 @@ class Bot:
             Current uptime: {uptime_min} minutes
         """)
 
-    def run():
+
+    def run(self):
         """Initiates chat monitor and trading"""
 
         # get input for initial cash stack and initiate paper trading instance
@@ -69,6 +72,9 @@ class Bot:
 
                     elif command == '!update':
                         pt.getUpdate()
+
+                    elif command == '!uptime':
+                        self.getUptime()
 
                     # no matching command, produce command error
                     else:

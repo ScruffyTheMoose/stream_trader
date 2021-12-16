@@ -46,7 +46,7 @@ class PaperTrade:
 
             # print to log
             print(f"""
-                Successfully purchased share of {ticker}
+                Successfully purchased share of ${ticker} for {price}
             """)
 
         # produce balance error
@@ -85,7 +85,7 @@ class PaperTrade:
 
                 # print to log
                 print(f"""
-                    Successfully sold share of {ticker}
+                    Successfully sold share of ${ticker} for {price}
                 """)
             
             # produce share count error
@@ -133,19 +133,19 @@ class PaperTrade:
 
     
     def balanceError(self, ticker) -> None:
-        print(f"### There is not a large enough balance to purchase {ticker} ###")
+        print(f"### There is not a large enough balance to purchase ${ticker} ###")
 
     
     def shareCountError(self, ticker) -> None:
-        print(f"### There are no remaining shares of {ticker} to sell ###")
+        print(f"### There are no remaining shares of ${ticker} to sell ###")
 
     
     def holdingsError(self, ticker) -> None:
-        print(f"### There are no holdings of {ticker} currently in the portfolio ###")
+        print(f"### There are no holdings of ${ticker} currently in the portfolio ###")
 
 
     def commandError(self) -> None:
         print("### Incorrect command syntax, try: !buy ['ticker-symbol'] or !sell ['ticker-symbol'] ###")
 
     def notFound(self, ticker) -> None:
-        print("### No pricing data found for ticker {ticker} ###")
+        print("### No pricing data found for ticker ${ticker} ###")
