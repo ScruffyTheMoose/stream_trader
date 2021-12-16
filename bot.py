@@ -78,10 +78,7 @@ class Bot:
                     else:
                         pt.commandError()
 
-                if pt.order_count > 0 and pt.order_count % 10 == 0:
-                    pt.getValue()
-                    pt.getpnl()
 
-
+# main module check
 if __name__ == "__main__":
     Bot().run()
