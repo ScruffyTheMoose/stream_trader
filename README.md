@@ -53,25 +53,25 @@ Returns the uptime of the bot from initialization in minutes.
 ## Errors
 * Balance
 ```
-### There is not a large enough balance to purchase {ticker} ###
+### There is not a large enough balance to purchase ${ticker} ###
 ```
 
 * Share Count
 ```
-### There are no remaining shares of {ticker} to sell ###
+### There are no remaining shares of ${ticker} to sell ###
 ```
 
 * Holdings
 ```
-### There are no holdings of {ticker} currently in the portfolio ###
+### There are no holdings of ${ticker} currently in the portfolio ###
 ```
 
 * Command
 ```
-### Incorrect command syntax, try: !buy 'ticker' or !sell 'ticker' ###
+### Incorrect command syntax, try: !buy ['ticker-symbol'] or !sell ['ticker-symbol'] ###
 ```
 
 * Symbol Not Found
 ```
-### No pricing data found for ticker {ticker} ###
+### No pricing data found for ticker ${ticker} ###
 ```
