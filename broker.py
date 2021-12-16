@@ -145,7 +145,7 @@ class PaperTrade:
 
 
     def commandError(self) -> None:
-        print("### Incorrect command syntax, try: !buy 'ticker' or !sell 'ticker' ###")
+        print("### Incorrect command syntax, try: !buy ['ticker-symbol'] or !sell ['ticker-symbol'] ###")
 
     def notFound(self, ticker) -> None:
         print("### No pricing data found for ticker {ticker} ###")
