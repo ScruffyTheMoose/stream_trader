@@ -15,6 +15,11 @@
 ### Installation
 *coming soon*
 
+### Launch
+```
+python bot.py <starting-cash> <stream-id>
+```
+
 ## Commands
 None of the commands are case sensitive. There are a series of code blocks to catch errors and log specific details regarding what occurred.
 
