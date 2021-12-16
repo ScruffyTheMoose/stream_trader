@@ -19,20 +19,33 @@ None of the commands are case sensitive. There are a series of code blocks to ca
 ```
 !buy ['ticker-symbol']
 ```
+An update regarding the purchase order will be logged to terminal.
 If the chatter fails to input a symbol or enters a non-existant symbol, an error with specific information will be printed to the terminal. 
 If there is not a large enough cash balance to make the purchase a note will be printed to terminal.
+Example successul purchase log:
+```
+Successfully purchased share of $AAPL for $155.47
+```
 
 * Sell a share
 ```
 !sell ['ticker-symbol']
 ```
 If the chatter order the sale of a stock which is not in the portfolio, an error is returned and logged.
+Example successful sale log:
+```
+Successfully sold share of $AAPL for $127.86
+```
 
 * Update PnL
 ```
 !update
 ```
 Upon receiving the order to update, a message containing the current profit/loss will be printed. This is based on current market value of the entire portfolio.
+Command return to log:
+```
+Current Profit/Loss: $88977.24
+```
 
 ### Errors
 * Balance
