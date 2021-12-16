@@ -8,16 +8,20 @@
 * ~~Command line input for init~~
 * Short selling
 * Live updating chart and table that will provide users/chatters with easy to read data regarding the status of the bot
-* Installation through pip and instructions for install
+* Installation through pip and ~~instructions for install~~
 * Live chat output alongside current terminal logging
 * Realistic transaction fees
 
 ### Installation
-*coming soon*
+*pip coming soon*
+Currently, you can fork this repo and install all dependencies through the pipfile.
+```
+pipenv install
+```
 
 ### Launch
 ```
-python bot.py <starting-cash> <stream-id>
+pipenv run python bot.py <starting-cash> <stream-id>
 ```
 
 ## Commands
