@@ -6,13 +6,14 @@ class PaperTrade:
     # Initiates bank with $100,000 default cash
     # Initiates empty holdings dictionary
     # Initiates value to track share value as prices update
-    def __init__(self) -> None:
-        """Constructor"""
-        self.init_bank = 100000
-        self.bank = 100000
+    def __init__(self, cashStack) -> None:
+        """Constructs a paper trading instance"""
+        self.init_bank = cashStack
+        self.bank = cashStack
         self.holdings_value = 0
         self.pnl = 0
         self.holdings = {}
+        self.order_count = 0
 
 
     def buy(self, ticker: str) -> None:
@@ -35,6 +36,7 @@ class PaperTrade:
 
             # taking cost of share from cash stack
             self.bank -= price
+            self.order_count += 1
 
         # produce balance error
         else:
@@ -67,6 +69,7 @@ class PaperTrade:
 
                 # adding profit/loss to cash stack
                 self.bank += price
+                self.order_count += 1
             
             # produce share count error
             else:
@@ -98,6 +101,7 @@ class PaperTrade:
 
         # determine and assign PnL
         self.pnl = self.holdings_value - self.init_bank
+        print(f"Current profit/loss: ${self.pnl}")
 
     
     def balanceError(self, ticker) -> None:
@@ -110,3 +114,7 @@ class PaperTrade:
     
     def holdingsError(self, ticker) -> None:
         print(f"### There are no holdings of {ticker} currently in the portfolio ###")
+
+
+    def commandError(self) -> None:
+        print("### Incorrect command syntax, try: !buy 'ticker' or !sell 'ticker' ###")
