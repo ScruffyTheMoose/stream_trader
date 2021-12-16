@@ -8,6 +8,7 @@
 * Live updating chart and table that will provide users/chatters with easy to read data regarding the status of the bot
 * Installation through pip and instructions for install
 * Live chat output alongside current terminal logging
+* Realistic transaction fees
 
 ### Installation
 *coming soon*
