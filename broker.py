@@ -17,21 +17,28 @@ class PaperTrade:
 
     def buy(self, ticker: str) -> None:
         """Purchase a single share of the given stock ticker."""
-     
+        
         # retrieving live price
         price = si.get_live_price(ticker)
 
-        # checking if reference already exists in holdings
-        # if no reference exists, create a new element with init values
-        if ticker not in self.holdings.keys():
-            self.holdings[ticker] = {'shares': 1, 'cost': price}
-        # if reference already exists, update
-        else:
-            self.holdings[ticker]['shares'] += 1
-            self.holdings[ticker]['cost'] += price
+        # checking that there is enough cash to purchase
+        if self.bank > price:
 
-        # taking cost of share from cash stack
-        self.bank -= price
+            # checking if reference already exists in holdings
+            # if no reference exists, create a new element with init values
+            if ticker not in self.holdings.keys():
+                self.holdings[ticker] = {'shares': 1, 'cost': price}
+            # if reference already exists, update
+            else:
+                self.holdings[ticker]['shares'] += 1
+                self.holdings[ticker]['cost'] += price
+
+            # taking cost of share from cash stack
+            self.bank -= price
+
+        # produce balance error
+        else:
+            self.balanceError()
 
 
     def sell(self, ticker: str) -> None:
@@ -60,9 +67,19 @@ class PaperTrade:
 
                 # adding profit/loss to cash stack
                 self.bank += price
+            
+            # produce share count error
+            else:
+                self.shareCountError()
+        
+        # produce holdings error
+        else:
+            self.holdingsError()
 
 
     def getValue(self) -> None:
+        """Determine the value of current holdings"""
+
         # value to return
         newValue = 0
 
@@ -77,5 +94,19 @@ class PaperTrade:
 
 
     def getpnl(self) -> None:
+        """Determine the Profit and Loss"""
+
         # determine and assign PnL
         self.pnl = self.holdings_value - self.init_bank
+
+    
+    def balanceError(self, ticker) -> None:
+        print(f"### There is not a large enough balance to purchase {ticker} ###")
+
+    
+    def shareCountError(self, ticker) -> None:
+        print(f"### There are no remaining shares of {ticker} to sell ###")
+
+    
+    def holdingsError(self, ticker) -> None:
+        print(f"### There are no holdings of {ticker} currently in the portfolio ###")
