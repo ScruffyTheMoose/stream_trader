@@ -27,6 +27,7 @@ Example successul purchase log:
 Successfully purchased share of $AAPL for $155.47
 ```
 
+
 * Sell a share
 ```
 !sell ['ticker-symbol']
@@ -36,6 +37,7 @@ Example successful sale log:
 ```
 Successfully sold share of $AAPL for $127.86
 ```
+
 
 * Update PnL
 ```
