@@ -1,5 +1,6 @@
 import pytchat
 from broker import PaperTrade # to initiate paper trading instance
+import sys
 import time
 import datetime
 
@@ -22,17 +23,23 @@ class Bot:
         print(f"""Current uptime: {uptime_min}""")
 
 
-    def run(self):
+    def checkSys(self) -> None:
+        if len(sys.argv) < 3:
+            print("Incorrect or insufficient arguments given. Try 'python bot.py <initial-cash> <stream-ID>'")
+            quit()
+
+
+    def run(self) -> None:
         """Initiates chat monitor and trading"""
 
+        self.checkSys()
+
         # get input for initial cash stack and initiate paper trading instance
-        # start_cash = input("Enter starting cash stack:")
-        init_balance = int(input("Enter initial trade balance: "))
+        init_balance = int(float(sys.argv[1]))
         pt = PaperTrade(init_balance)
 
         # get input for channel ID and initiate chat instance
-        # channel = input("Enter stream ID:")
-        stream_id = input("Enter Youtube stream ID: ")
+        stream_id = sys.argv[2]
         chat = pytchat.create(video_id=stream_id)
 
         # print to log that bot is running

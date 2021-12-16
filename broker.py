@@ -3,6 +3,7 @@ import yahoo_fin.stock_info as si
 
 class PaperTrade:
 
+
     # Constructor
     # Initiates bank with $100,000 default cash
     # Initiates empty holdings dictionary
