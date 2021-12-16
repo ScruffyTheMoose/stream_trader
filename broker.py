@@ -1,3 +1,4 @@
+from os import error
 import yahoo_fin.stock_info as si
 
 class PaperTrade:
@@ -16,11 +17,16 @@ class PaperTrade:
         self.order_count = 0
 
 
+    # Purchase given ticker and update
     def buy(self, ticker: str) -> None:
         """Purchase a single share of the given stock ticker."""
         
         # retrieving live price
-        price = si.get_live_price(ticker)
+        try:
+            price = si.get_live_price(ticker)
+        except AssertionError:
+            self.notFound(ticker)
+            return
 
         # checking that there is enough cash to purchase
         if self.bank > price:
@@ -38,11 +44,17 @@ class PaperTrade:
             self.bank -= price
             self.order_count += 1
 
+            # print to log
+            print(f"""
+                Successfully purchased share of {ticker}
+            """)
+
         # produce balance error
         else:
-            self.balanceError()
+            self.balanceError(ticker)
 
 
+    # Sell given ticker and update
     def sell(self, ticker: str) -> None:
         """Sell a single share of the given stock ticker."""
 
@@ -70,16 +82,22 @@ class PaperTrade:
                 # adding profit/loss to cash stack
                 self.bank += price
                 self.order_count += 1
+
+                # print to log
+                print(f"""
+                    Successfully sold share of {ticker}
+                """)
             
             # produce share count error
             else:
-                self.shareCountError()
+                self.shareCountError(ticker)
         
         # produce holdings error
         else:
-            self.holdingsError()
+            self.holdingsError(ticker)
 
 
+    # update the value of current holdings in this instance
     def getValue(self) -> None:
         """Determine the value of current holdings"""
 
@@ -96,12 +114,22 @@ class PaperTrade:
         self.holdings_value = newValue
 
 
+    # update the pnl tracker if this instance
     def getpnl(self) -> None:
         """Determine the Profit and Loss"""
 
         # determine and assign PnL
-        self.pnl = self.holdings_value - self.init_bank
-        print(f"Current profit/loss: ${self.pnl}")
+        self.pnl = (self.holdings_value + self.bank)- self.init_bank
+
+
+    # output pnl to log
+    def getUpdate(self):
+        """Output the PnL to log/terminal"""
+        self.getValue()
+        self.getpnl()
+        print(f"""
+            Current Profit/Loss: ${self.pnl}
+        """)
 
     
     def balanceError(self, ticker) -> None:
@@ -118,3 +146,6 @@ class PaperTrade:
 
     def commandError(self) -> None:
         print("### Incorrect command syntax, try: !buy 'ticker' or !sell 'ticker' ###")
+
+    def notFound(self, ticker) -> None:
+        print("### No pricing data found for ticker {ticker}")
