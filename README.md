@@ -11,6 +11,7 @@
 * Installation through pip and ~~instructions for install~~
 * Live chat output alongside current terminal logging
 * Realistic transaction fees
+* List of key features
 
 ### Installation
 *pip coming soon*
