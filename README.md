@@ -2,7 +2,7 @@
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 
-`Stream Trader` is a Youtube based chat bot. It takes a simple commands in the live chat and makes live tracked paper trades instantly. This bot is made possible using the [yahoo_fin](http://theautomatic.net/yahoo_fin-documentation/) and [pytchat](https://github.com/taizan-hokuto/pytchat) libraries.
+`Stream Trader` is a Youtube based chat bot. It receives commands in the live chat of a stream and makes trades in a simulated 'paper' market. This bot is made possible using the [yahoo_fin](http://theautomatic.net/yahoo_fin-documentation/) and [pytchat](https://github.com/taizan-hokuto/pytchat) libraries.
 
 ### To Be Built
 * ~~Command line input for init~~
@@ -10,6 +10,7 @@
 * Live updating chart and table that will provide users/chatters with easy to read data regarding the status of the bot
 * Installation through pip and ~~instructions for install~~
 * Live chat output alongside current terminal logging
+* Instance logging - tracks every order made during an instance for review
 * Realistic transaction fees
 * List of key features
 
