@@ -26,7 +26,7 @@ Example successul purchase log:
 ```
 Successfully purchased share of $AAPL for $155.47
 ```
-< br/ >
+\
 
 * Sell a share
 ```
@@ -37,7 +37,7 @@ Example successful sale log:
 ```
 Successfully sold share of $AAPL for $127.86
 ```
-< br/ >
+\
 
 * Update PnL
 ```
