@@ -7,7 +7,7 @@ class PaperTrade:
     # Initiates bank with $100,000 default cash
     # Initiates empty holdings dictionary
     # Initiates value to track share value as prices update
-    def __init__(self, cashStack) -> None:
+    def __init__(self, cashStack=100000) -> None:
         """Constructs a paper trading instance"""
         self.init_bank = cashStack
         self.bank = cashStack
