@@ -12,7 +12,7 @@
 ### Installation
 *coming soon*
 
-### Commands
+## Commands
 None of the commands are case sensitive. There are a series of code blocks to catch errors and log specific details regarding what occurred.
 
 * Purchase a share
@@ -26,8 +26,7 @@ Example successul purchase log:
 ```
 Successfully purchased share of $AAPL for $155.47
 ```
-\
-
+--
 * Sell a share
 ```
 !sell ['ticker-symbol']
@@ -37,8 +36,7 @@ Example successful sale log:
 ```
 Successfully sold share of $AAPL for $127.86
 ```
-\
-
+--
 * Update PnL
 ```
 !update
@@ -48,8 +46,14 @@ Command return to log:
 ```
 Current Profit/Loss: $88977.24
 ```
+--
+* Bot Uptime
+```
+!uptime
+```
+Returns the uptime of the bot from initialization in minutes.
 
-### Errors
+## Errors
 * Balance
 ```
 ### There is not a large enough balance to purchase {ticker} ###
