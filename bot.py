@@ -19,9 +19,7 @@ class Bot:
         conversion = datetime.timedelta(seconds=uptime_sec)
         uptime_min = str(conversion)
 
-        print(f"""
-            Current uptime: {uptime_min} minutes
-        """)
+        print(f"""Current uptime: {uptime_min}""")
 
 
     def run(self):
@@ -29,7 +27,7 @@ class Bot:
 
         # get input for initial cash stack and initiate paper trading instance
         # start_cash = input("Enter starting cash stack:")
-        init_balance = input("Enter initial trade balance: ")
+        init_balance = int(input("Enter initial trade balance: "))
         pt = PaperTrade(init_balance)
 
         # get input for channel ID and initiate chat instance

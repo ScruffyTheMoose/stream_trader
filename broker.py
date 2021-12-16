@@ -45,9 +45,7 @@ class PaperTrade:
             self.order_count += 1
 
             # print to log
-            print(f"""
-                Successfully purchased share of ${ticker} for {price}
-            """)
+            print(f"""Successfully purchased share of ${ticker.upper()} for ${price}""")
 
         # produce balance error
         else:
@@ -84,9 +82,7 @@ class PaperTrade:
                 self.order_count += 1
 
                 # print to log
-                print(f"""
-                    Successfully sold share of ${ticker} for {price}
-                """)
+                print(f"""Successfully sold share of ${ticker.upper()} for ${price}""")
             
             # produce share count error
             else:
@@ -127,9 +123,7 @@ class PaperTrade:
         """Output the PnL to log/terminal"""
         self.getValue()
         self.getpnl()
-        print(f"""
-            Current Profit/Loss: ${self.pnl}
-        """)
+        print(f"""Current Profit/Loss: ${self.pnl}""")
 
     
     def balanceError(self, ticker) -> None:
