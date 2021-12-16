@@ -148,4 +148,4 @@ class PaperTrade:
         print("### Incorrect command syntax, try: !buy 'ticker' or !sell 'ticker' ###")
 
     def notFound(self, ticker) -> None:
-        print("### No pricing data found for ticker {ticker}")
+        print("### No pricing data found for ticker {ticker} ###")

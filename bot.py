@@ -50,7 +50,7 @@ class Bot:
                 # checking if the message contains command prefix
                 if c.message[0] == '!':
 
-                    order = c.message.split(' ')
+                    order = c.message.lower().split(' ')
                     
                     try:
                         command = order[0]
