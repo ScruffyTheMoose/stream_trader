@@ -28,59 +28,56 @@ None of the commands are case sensitive. There are a series of code blocks to ca
 ```
 !buy ['ticker-symbol']
 ```
-An update regarding the purchase order will be logged to terminal.
-If the chatter fails to input a symbol or enters a non-existant symbol, an error with specific information will be printed to the terminal. 
-If there is not a large enough cash balance to make the purchase a note will be printed to terminal.
 ```
-Successfully purchased share of $AAPL for $155.47
+[HH:MM:SS] -- <user> successfully purchased share of $AAPL for $155.47
 ```
 --
 * Sell a share
 ```
 !sell ['ticker-symbol']
 ```
-If the chatter order the sale of a stock which is not in the portfolio, an error is returned and logged.
 ```
-Successfully sold share of $AAPL for $127.86
+[HH:MM:SS] -- <user> successfully sold share of $AAPL for $127.86
 ```
 --
 * Update PnL
 ```
 !update
 ```
-Upon receiving the order to update, a message containing the current profit/loss will be printed. This is based on current market value of the entire portfolio.
 ```
-Current Profit/Loss: $88977.24
+[HH:MM:SS] -- Current Profit/Loss: $88977.24
 ```
 --
 * Bot Uptime
 ```
 !uptime
 ```
-Returns the uptime of the bot from initialization in minutes.
+```
+[HH:MM:SS] -- Current uptime: HH:MM:SS
+```
 
 ## Errors
 * Balance
 ```
-### There is not a large enough balance to purchase ${ticker} ###
+[HH:MM:SS] -- ### There is not a large enough balance to purchase ${ticker} ###
 ```
 
 * Share Count
 ```
-### There are no remaining shares of ${ticker} to sell ###
+[HH:MM:SS] -- ### There are no remaining shares of ${ticker} to sell ###
 ```
 
 * Holdings
 ```
-### There are no holdings of ${ticker} currently in the portfolio ###
+[HH:MM:SS] -- ### There are no holdings of ${ticker} currently in the portfolio ###
 ```
 
 * Command
 ```
-### Incorrect command syntax, try: !buy ['ticker-symbol'] or !sell ['ticker-symbol'] ###
+[HH:MM:SS] -- ### Incorrect command syntax, try: !buy ['ticker-symbol'] or !sell ['ticker-symbol'] ###
 ```
 
 * Symbol Not Found
 ```
-### No pricing data found for ticker ${ticker} ###
+[HH:MM:SS] -- ### No pricing data found for ticker ${ticker} ###
 ```
