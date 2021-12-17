@@ -22,6 +22,7 @@ class Bot:
         self.start_time = time.time()
         self.init_balance = int(float(sys.argv[1]))
         self.stream_id = sys.argv[2]
+        self.chart_refresh = sys.argv[3]
 
 
 #===============================
@@ -78,7 +79,7 @@ class Bot:
 
     def refreshTimer(self, prev_time: float, trade_instance: PaperTrade) -> float:
         curr_time = time.time()
-        if ( curr_time - prev_time ) > 10:
+        if ( curr_time - prev_time ) > self.chart_refresh:
             # call method to update log with total asset value
             trade_instance.chartLog(curr_time)
 

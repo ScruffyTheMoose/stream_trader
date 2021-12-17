@@ -3,6 +3,7 @@ import yahoo_fin.stock_info as si
 import time
 import datetime
 
+
 class PaperTrade:
 
 
