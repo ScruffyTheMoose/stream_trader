@@ -6,6 +6,11 @@ import datetime
 class PaperTrade:
 
 
+#===============================
+#   INIT
+#===============================
+
+
     # Constructor
     # Initiates balance with $100,000 default cash
     # Initiates empty holdings dictionary
@@ -149,6 +154,7 @@ class PaperTrade:
         self.getValue()
         self.getpnl()
         console = f"""[{time}] -- Current Profit/Loss: ${self.pnl}"""
+
         self.toLog(console)
 
 
@@ -188,24 +194,35 @@ class PaperTrade:
 
     
     def balanceError(self, ticker: str, time: str) -> None:
+        """Prints and Logs error if balance is not large enough to place order"""
+
         console = f"[{time}] -- ### There is not a large enough balance to purchase ${ticker} ###"
         self.toLog(console)
 
     
     def shareCountError(self, ticker: str, time: str) -> None:
+        """Prints and Logs error if there are no shares to sell"""
+
         console = f"[{time}] -- ### There are no remaining shares of ${ticker} to sell ###"
         self.toLog(console)
 
     
     def holdingsError(self, ticker: str, time: str) -> None:
+        """Prints and Logs error if portfolio does not contains symbol"""
+
         console = f"[{time}] -- ### There are no holdings of ${ticker} currently in the portfolio ###"
         self.toLog(console)
 
 
     def commandError(self, time: str) -> None:
+        """Prints and Logs if a command was received but is unable to be completed"""
+
         console = f"[{time}] -- ### Incorrect command syntax, try: !buy ['ticker-symbol'] or !sell ['ticker-symbol'] ###"
         self.toLog(console)
 
+
     def notFound(self, ticker: str, time: str) -> None:
+        """Prints and Logs error if order is placed for symbol that does not exist"""
+
         console = f"[{time}] -- ### No pricing data found for ticker ${ticker} ###"
         self.toLog(console)
