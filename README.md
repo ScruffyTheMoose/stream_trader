@@ -10,7 +10,7 @@
 * Live updating chart and table that will provide users/chatters with easy to read data regarding the status of the bot
 * Installation through pip and ~~instructions for install~~
 * ~~Live chat output alongside current terminal logging~~ # not necessary with UI
-* Instance logging - tracks every order made during an instance for review
+* ~~Instance logging - tracks every order made during an instance for review~~
 * ~~Realistic transaction fees~~ # NASDAQ and NYSE listed stocks do not have transaction fees
 * List of key features
 
