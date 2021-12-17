@@ -4,50 +4,31 @@ import sys
 import time
 import datetime
 
-# example chat access for reference
-# print(f"{c.datetime} [{c.author.name}]- {c.message}")
+# joma livestream ID -> PY8f1Z3nARo
 
 class Bot:
 
 
     def __init__(self) -> None:
         """Constructor"""
+
+        self.checkSys()
         self.start_time = time.time()
-
-
-    def getUptime(self) -> None:
-        uptime_sec = time.time() - self.start_time
-        conversion = datetime.timedelta(seconds=uptime_sec)
-        uptime_min = str(conversion)
-
-        print(f"""Current uptime: {uptime_min}""")
-
-
-    def checkSys(self) -> None:
-        if len(sys.argv) < 3:
-            print("Incorrect or insufficient arguments given. Try 'python bot.py <initial-cash> <stream-ID>'")
-            quit()
+        self.init_balance = int(float(sys.argv[1]))
+        self.stream_id = sys.argv[2]
 
 
     def run(self) -> None:
         """Initiates chat monitor and trading"""
 
-        self.checkSys()
+        # Instantiate paper trading instance
+        pt = PaperTrade(self.init_balance)
 
-        # get input for initial cash stack and initiate paper trading instance
-        init_balance = int(float(sys.argv[1]))
-        pt = PaperTrade(init_balance)
+        # Instantiate chat pull
+        chat = pytchat.create(video_id=self.stream_id)
 
-        # get input for channel ID and initiate chat instance
-        stream_id = sys.argv[2]
-        chat = pytchat.create(video_id=stream_id)
-
-        # print to log that bot is running
-        print(f"""
-                    == Bot is running ==
-                Stream ID: {stream_id}
-                Initial Balance: {pt.bank}
-            """)
+        # Running to log
+        self.isRunning(pt)
 
         # continuously evaluating new chat messages
         while ( chat.is_alive() ):
@@ -66,24 +47,55 @@ class Bot:
                     except:
                         command = order[0]
                         ticker = 'N/A'
-                    
-                    # if buy command
-                    if command == '!buy':
-                        pt.buy(ticker)
 
-                    # if sell command
-                    elif command == '!sell':
-                        pt.sell(ticker)
+                    self.checkCommand(pt, command, ticker)
 
-                    elif command == '!update':
-                        pt.getUpdate()
 
-                    elif command == '!uptime':
-                        self.getUptime()
+    def getUptime(self) -> None:
+        """Logs uptime of bot from start"""
 
-                    # no matching command, produce command error
-                    else:
-                        pt.commandError()
+        uptime_sec = time.time() - self.start_time
+        conversion = datetime.timedelta(seconds=uptime_sec)
+        uptime_min = str(conversion)
+        print(f"""Current uptime: {uptime_min}""")
+
+
+    def checkSys(self) -> None:
+        """Checks if user gave necessary arguments on launch"""
+
+        if len(sys.argv) < 3:
+            print("Incorrect or insufficient arguments given. Try 'python bot.py <initial-cash> <stream-ID>'")
+            quit()
+
+
+    def isRunning(self, pt: PaperTrade) -> None:
+        """Logs initial data for bot"""
+
+        print(f"""
+                    == Bot is running ==
+                Stream ID: {self.stream_id}
+                Initial Balance: {pt.balance}
+            """)
+
+
+    def checkCommand(self, pt: PaperTrade, command: str, ticker: str) -> None:
+        # if buy command
+        if command == '!buy':
+            pt.buy(ticker)
+
+        # if sell command
+        elif command == '!sell':
+            pt.sell(ticker)
+
+        elif command == '!update':
+            pt.getUpdate()
+
+        elif command == '!uptime':
+            self.getUptime()
+
+        # no matching command, produce command error
+        else:
+            pt.commandError()
 
 
 # main module check

@@ -5,13 +5,13 @@ class PaperTrade:
 
 
     # Constructor
-    # Initiates bank with $100,000 default cash
+    # Initiates balance with $100,000 default cash
     # Initiates empty holdings dictionary
     # Initiates value to track share value as prices update
-    def __init__(self, cashStack=100000) -> None:
+    def __init__(self, initial_balance=100000) -> None:
         """Constructs a paper trading instance"""
-        self.init_bank = cashStack
-        self.bank = cashStack
+        self.init_balance = initial_balance
+        self.balance = initial_balance
         self.holdings_value = 0
         self.pnl = 0
         self.holdings = {}
@@ -30,7 +30,7 @@ class PaperTrade:
             return
 
         # checking that there is enough cash to purchase
-        if self.bank > price:
+        if self.balance > price:
 
             # checking if reference already exists in holdings
             # if no reference exists, create a new element with init values
@@ -42,7 +42,7 @@ class PaperTrade:
                 self.holdings[ticker]['cost'] += price
 
             # taking cost of share from cash stack
-            self.bank -= price
+            self.balance -= price
             self.order_count += 1
 
             # print to log
@@ -79,7 +79,7 @@ class PaperTrade:
                 self.holdings[ticker]['cost'] -= avg_cost
 
                 # adding profit/loss to cash stack
-                self.bank += price
+                self.balance += price
                 self.order_count += 1
 
                 # print to log
@@ -116,7 +116,7 @@ class PaperTrade:
         """Determine the Profit and Loss"""
 
         # determine and assign PnL
-        self.pnl = (self.holdings_value + self.bank)- self.init_bank
+        self.pnl = (self.holdings_value + self.balance)- self.init_balance
 
 
     # output pnl to log
