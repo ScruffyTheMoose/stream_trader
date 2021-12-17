@@ -18,6 +18,11 @@ class Bot:
         self.stream_id = sys.argv[2]
 
 
+#===============================
+#   MAIN
+#===============================
+
+
     def run(self) -> None:
         """Initiates chat monitor and trading"""
 
@@ -47,17 +52,22 @@ class Bot:
                     except:
                         command = order[0]
                         ticker = 'N/A'
+                    
+                    user = c.author.name
+                    msg_time = c.datetime
 
-                    self.checkCommand(pt, command, ticker)
+                    self.checkCommand(pt, command, ticker, user, msg_time)
 
 
-    def getUptime(self) -> None:
-        """Logs uptime of bot from start"""
+#===============================
+#   STATUS AND ACCESSORS
+#===============================
 
-        uptime_sec = time.time() - self.start_time
-        conversion = datetime.timedelta(seconds=uptime_sec)
-        uptime_min = str(conversion)
-        print(f"""Current uptime: {uptime_min}""")
+
+    def getUptime(self, trade_instance: PaperTrade, time: str) -> str:
+        """Logs and returns uptime of bot from initialization"""
+
+        trade_instance.getUptime(time)
 
 
     def checkSys(self) -> None:
@@ -68,34 +78,45 @@ class Bot:
             quit()
 
 
-    def isRunning(self, pt: PaperTrade) -> None:
-        """Logs initial data for bot"""
+    def isRunning(self, trade_instance: PaperTrade) -> str:
+        """Logs and returns initial data for bot"""
 
-        print(f"""
-                    == Bot is running ==
-                Stream ID: {self.stream_id}
-                Initial Balance: {pt.balance}
-            """)
+        stat = f"""
+        ====== Bot is running ======
+        Stream ID: {self.stream_id}
+        Initial Balance: {trade_instance.balance}
+
+        """
+        
+        trade_instance.toLog(stat)
 
 
-    def checkCommand(self, pt: PaperTrade, command: str, ticker: str) -> None:
+    def checkCommand(self, trade_instance: PaperTrade, command: str, ticker: str, user: str, time: str) -> None:
         # if buy command
         if command == '!buy':
-            pt.buy(ticker)
+            trade_instance.buy(ticker, user, time)
 
         # if sell command
         elif command == '!sell':
-            pt.sell(ticker)
+            trade_instance.sell(ticker, user, time)
 
         elif command == '!update':
-            pt.getUpdate()
+            trade_instance.getUpdate(time)
 
         elif command == '!uptime':
-            self.getUptime()
+            self.getUptime(trade_instance, time)
+
+        elif command == '!holdings':
+            trade_instance.getHoldings(trade_instance.holdings)
 
         # no matching command, produce command error
         else:
-            pt.commandError()
+            trade_instance.commandError(time)
+
+
+#===============================
+#   RUN
+#===============================
 
 
 # main module check

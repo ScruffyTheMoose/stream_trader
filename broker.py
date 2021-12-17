@@ -1,5 +1,7 @@
-from os import error
+import pandas as pd
 import yahoo_fin.stock_info as si
+import time
+import datetime
 
 class PaperTrade:
 
@@ -10,6 +12,8 @@ class PaperTrade:
     # Initiates value to track share value as prices update
     def __init__(self, initial_balance=100000) -> None:
         """Constructs a paper trading instance"""
+
+        # Instance trade data
         self.init_balance = initial_balance
         self.balance = initial_balance
         self.holdings_value = 0
@@ -17,16 +21,27 @@ class PaperTrade:
         self.holdings = {}
         self.order_count = 0
 
+        # Instance time data
+        self.start_time = time.time()
+
+        # Log file
+        self.log_file = f"log-{int(self.start_time)}.txt"
+
+
+#===============================
+#   ORDER HANDLING
+#===============================
+
 
     # Purchase given ticker and update
-    def buy(self, ticker: str) -> None:
+    def buy(self, ticker: str, user: str, time: str) -> None:
         """Purchase a single share of the given stock ticker."""
         
         # retrieving live price
         try:
             price = si.get_live_price(ticker)
         except AssertionError:
-            self.notFound(ticker)
+            self.notFound(ticker, time)
             return
 
         # checking that there is enough cash to purchase
@@ -46,15 +61,17 @@ class PaperTrade:
             self.order_count += 1
 
             # print to log
-            print(f"""Successfully purchased share of ${ticker.upper()} for ${price}""")
+            console = f"""[{time}] -- {user} successfully purchased share of ${ticker.upper()} for ${price}"""
+            self.toLog(console)
+
 
         # produce balance error
         else:
-            self.balanceError(ticker)
+            self.balanceError(ticker, time)
 
 
     # Sell given ticker and update
-    def sell(self, ticker: str) -> None:
+    def sell(self, ticker: str, user: str, time: str) -> None:
         """Sell a single share of the given stock ticker."""
 
         # checking that ticker exists in holdings
@@ -83,15 +100,21 @@ class PaperTrade:
                 self.order_count += 1
 
                 # print to log
-                print(f"""Successfully sold share of ${ticker.upper()} for ${price}""")
+                console = f"""[{time}] -- {user} successfully sold share of ${ticker.upper()} for ${price}"""
+                self.toLog(console)
             
             # produce share count error
             else:
-                self.shareCountError(ticker)
+                self.shareCountError(ticker, time)
         
         # produce holdings error
         else:
-            self.holdingsError(ticker)
+            self.holdingsError(ticker, time)
+
+
+#===============================
+#   STATUS AND ACCESSORS
+#===============================
 
 
     # update the value of current holdings in this instance
@@ -120,27 +143,69 @@ class PaperTrade:
 
 
     # output pnl to log
-    def getUpdate(self):
+    def getUpdate(self, time: str) -> None:
         """Output the PnL to log/terminal"""
+
         self.getValue()
         self.getpnl()
-        print(f"""Current Profit/Loss: ${self.pnl}""")
+        console = f"""[{time}] -- Current Profit/Loss: ${self.pnl}"""
+        self.toLog(console)
+
+
+    def getHoldings(self, holdings: dict) -> None:
+        """Logs dataframe of holdings at time of request"""
+
+        # Cloning current holdings to append with current
+        stats = pd.DataFrame(holdings)
+
+        df = pd.DataFrame(self.holdings)
+        print(df)
+
+
+    def getUptime(self, msg_time) -> None:
+        """Logs and returns uptime of trade instance from initialization"""
+
+        uptime_sec = time.time() - self.start_time
+        conversion = datetime.timedelta(seconds=uptime_sec)
+        uptime = str(conversion)
+        console = f"""[{msg_time}] -- Current uptime: {uptime}"""
+
+        self.toLog(console)
+
+
+    def toLog(self, item: str) -> None:
+        """Prints and Logs argument"""
+
+        print(item)
+        file = open(self.log_file, 'a')
+        file.write(item + " \n")
+        file.close()
 
     
-    def balanceError(self, ticker) -> None:
-        print(f"### There is not a large enough balance to purchase ${ticker} ###")
+#===============================
+#   ERRORS
+#===============================
 
     
-    def shareCountError(self, ticker) -> None:
-        print(f"### There are no remaining shares of ${ticker} to sell ###")
+    def balanceError(self, ticker: str, time: str) -> None:
+        console = f"[{time}] -- ### There is not a large enough balance to purchase ${ticker} ###"
+        self.toLog(console)
 
     
-    def holdingsError(self, ticker) -> None:
-        print(f"### There are no holdings of ${ticker} currently in the portfolio ###")
+    def shareCountError(self, ticker: str, time: str) -> None:
+        console = f"[{time}] -- ### There are no remaining shares of ${ticker} to sell ###"
+        self.toLog(console)
+
+    
+    def holdingsError(self, ticker: str, time: str) -> None:
+        console = f"[{time}] -- ### There are no holdings of ${ticker} currently in the portfolio ###"
+        self.toLog(console)
 
 
-    def commandError(self) -> None:
-        print("### Incorrect command syntax, try: !buy ['ticker-symbol'] or !sell ['ticker-symbol'] ###")
+    def commandError(self, time: str) -> None:
+        console = f"[{time}] -- ### Incorrect command syntax, try: !buy ['ticker-symbol'] or !sell ['ticker-symbol'] ###"
+        self.toLog(console)
 
-    def notFound(self, ticker) -> None:
-        print("### No pricing data found for ticker ${ticker} ###")
+    def notFound(self, ticker: str, time: str) -> None:
+        console = f"[{time}] -- ### No pricing data found for ticker ${ticker} ###"
+        self.toLog(console)
