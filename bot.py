@@ -3,6 +3,7 @@ from broker import PaperTrade # to initiate paper trading instance
 import sys
 import time
 
+# test stream ID
 # joma livestream ID -> PY8f1Z3nARo
 
 class Bot:
