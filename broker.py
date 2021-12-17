@@ -37,7 +37,8 @@ class PaperTrade:
 
         # Animation log file
         self.anim_log = f"anim-{int(self.start_time)}.txt"
-        f = open(self.anim_log, 'x')
+        f = open(self.anim_log, 'w')
+        f.write(f"0,{self.init_balance}")
         f.close()
 
 
@@ -190,6 +191,10 @@ class PaperTrade:
 
         self.toLog(console)
 
+    def getRuntime(self) -> float:
+        uptime_sec = int(time.time() - self.start_time)
+        return uptime_sec
+
 
     def toLog(self, item: str) -> None:
         """Prints and Logs argument"""
@@ -212,9 +217,9 @@ class PaperTrade:
         tot_assets = str(round(self.balance + self.getLiveValue(), 2))
 
         # converting 
-        log_time = str( datetime.datetime.fromtimestamp(req_time) )
+        log_time = str(self.getUptime())
         file = open(self.anim_log, 'a')
-        file.write(f"{log_time},{tot_assets}")
+        file.write(f"{self.getRuntime()},{tot_assets}")
         file.close()
 
 

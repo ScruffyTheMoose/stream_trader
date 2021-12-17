@@ -71,7 +71,8 @@ class Bot:
                     self.checkCommand(pt, command, ticker, user, msg_time)
             
             # add refresh and anim below
-            self.ref_time = self.refreshTimer(self.ref_time, pt)
+            if len(pt.holdings.keys()) > 0:
+                self.ref_time = self.refreshTimer(self.ref_time, pt)
 
 
 
