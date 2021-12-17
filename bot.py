@@ -2,6 +2,7 @@ import pytchat
 from broker import PaperTrade # to initiate paper trading instance
 import sys
 import time
+import datetime
 
 # test stream ID
 # joma livestream ID -> PY8f1Z3nARo
@@ -69,10 +70,24 @@ class Bot:
 #===============================
 
 
-    def getUptime(self, trade_instance: PaperTrade, time: str) -> str:
-        """Logs and returns uptime of bot from initialization"""
+    # def getUptime(self, trade_instance: PaperTrade, time: str) -> str:
+    #     """Logs and returns uptime of bot from initialization"""
 
-        trade_instance.getUptime(time)
+    #     trade_instance.getUptime(time)
+
+
+    def refreshTimer(self, prev_time: float, trade_instance: PaperTrade) -> float:
+        curr_time = time.time()
+        if ( curr_time - prev_time ) > 10:
+            # call method to update log with total asset value
+            trade_instance.chartLog(curr_time)
+
+            # call animate method to read in new data to chart
+            # to be built
+            pass
+
+        # will pass current time back to become prev time when called again
+        return curr_time
 
 
     def checkSys(self) -> None:
@@ -109,7 +124,7 @@ class Bot:
             trade_instance.getUpdate(time)
 
         elif command == '!uptime':
-            self.getUptime(trade_instance, time)
+            trade_instance.getUptime(time)
 
         elif command == '!holdings':
             trade_instance.getHoldings(trade_instance.holdings)
