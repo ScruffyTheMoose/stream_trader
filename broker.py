@@ -32,9 +32,13 @@ class PaperTrade:
 
         # Log file
         self.log_file = f"log-{int(self.start_time)}.txt"
+        f = open(self.log_file, 'x')
+        f.close()
 
         # Animation log file
-        self.anim_log = f"ani-{int(self.start_time)}.txt"
+        self.anim_log = f"anim-{int(self.start_time)}.txt"
+        f = open(self.anim_log, 'x')
+        f.close()
 
 
 #===============================

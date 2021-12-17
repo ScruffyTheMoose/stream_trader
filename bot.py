@@ -1,5 +1,6 @@
-import pytchat
 from broker import PaperTrade # to initiate paper trading instance
+from plot import Plot
+import pytchat
 import sys
 import time
 import datetime
@@ -22,7 +23,8 @@ class Bot:
         self.start_time = time.time()
         self.init_balance = int(float(sys.argv[1]))
         self.stream_id = sys.argv[2]
-        self.chart_refresh = sys.argv[3]
+        self.chart_refresh = int(sys.argv[3])
+        self.ref_time = time.time()
 
 
 #===============================
@@ -41,6 +43,9 @@ class Bot:
 
         # Running to log
         self.isRunning(pt)
+
+        # begin plot animation linked to instance's log
+        Plot(pt.anim_log).run()
 
         # continuously evaluating new chat messages
         while ( chat.is_alive() ):
@@ -64,6 +69,10 @@ class Bot:
                     msg_time = c.datetime
 
                     self.checkCommand(pt, command, ticker, user, msg_time)
+            
+            # add refresh and anim below
+            self.ref_time = self.refreshTimer(self.ref_time, pt)
+
 
 
 #===============================
@@ -105,7 +114,7 @@ class Bot:
         stat = f"""
         ====== Bot is running ======
         Stream ID: {self.stream_id}
-        Initial Balance: {trade_instance.balance}
+        Initial Balance: ${trade_instance.balance}
 
         """
         
