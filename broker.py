@@ -36,9 +36,11 @@ class PaperTrade:
         f.close()
 
         # Animation log file
+        self.last_time = 0
+
         self.anim_log = f"anim-{int(self.start_time)}.txt"
         f = open(self.anim_log, 'w')
-        f.write(f"0,{self.init_balance}")
+        f.write(f"0,{self.init_balance}" + '\n')
         f.close()
 
 
@@ -193,7 +195,7 @@ class PaperTrade:
         self.toLog(console)
 
     # Returns the uptime in seconds
-    def getRuntime(self) -> float:
+    def getRuntime(self) -> int:
         uptime_sec = int(time.time() - self.start_time)
         return uptime_sec
 
@@ -216,11 +218,12 @@ class PaperTrade:
         """Writes updated asset values to log file for animated plot"""
 
         # evaluating total value of combined cash and holdings
-        tot_assets = str(round(self.balance + self.getLiveValue(), 2))
+        tot_assets = str(round(self.balance + self.getLiveValue(self.holdings), 2))
+        minute = int(self.getRuntime() / 60)
 
         # writing
         file = open(self.anim_log, 'a')
-        file.write(f"{req_time},{tot_assets}")
+        file.write(f"{minute},{tot_assets}" + '\n')
         file.close()
 
 

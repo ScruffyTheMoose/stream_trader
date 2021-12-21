@@ -1,9 +1,7 @@
 from broker import PaperTrade # to initiate paper trading instance
-from plot import Plot
 import pytchat
 import sys
 import time
-import datetime
 
 # test stream ID
 # joma livestream ID -> PY8f1Z3nARo
@@ -26,8 +24,6 @@ class Bot:
         self.start_time = time.time()
         self.init_balance = int(float(sys.argv[1]))
         self.stream_id = sys.argv[2]
-        self.chart_refresh = int(sys.argv[3])
-        self.ref_time = time.time()
 
         # instantiating trade instance
         self.pt = PaperTrade(self.init_balance)
@@ -48,7 +44,7 @@ class Bot:
         self.isRunning(self.pt)
 
         # begin plot animation linked to instance's log
-        Plot(self.pt.anim_log).run()
+        # Plot(self.pt.anim_log).run()
 
         # continuously evaluating new chat messages
         while ( chat.is_alive() ):
@@ -75,7 +71,7 @@ class Bot:
             
             # add refresh and anim below
             self.refreshAnimLog(self.pt)
-            
+
 
 #===============================
 #   STATUS AND ACCESSORS
@@ -95,7 +91,7 @@ class Bot:
     def checkSys(self) -> None:
         """Checks if user gave necessary arguments on launch"""
 
-        if len(sys.argv) < 4:
+        if len(sys.argv) < 3:
             print("Incorrect or insufficient arguments given. Try 'python bot.py <initial-cash> <stream-ID>'")
             quit()
 
