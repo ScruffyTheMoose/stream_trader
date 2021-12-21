@@ -181,6 +181,7 @@ class PaperTrade:
         print(df)
 
 
+    # Logs the uptime in date format
     def getUptime(self, msg_time) -> None:
         """Logs and returns uptime of trade instance from initialization"""
 
@@ -191,6 +192,7 @@ class PaperTrade:
 
         self.toLog(console)
 
+    # Returns the uptime in seconds
     def getRuntime(self) -> float:
         uptime_sec = int(time.time() - self.start_time)
         return uptime_sec
@@ -216,10 +218,9 @@ class PaperTrade:
         # evaluating total value of combined cash and holdings
         tot_assets = str(round(self.balance + self.getLiveValue(), 2))
 
-        # converting 
-        log_time = str(self.getUptime())
+        # writing
         file = open(self.anim_log, 'a')
-        file.write(f"{self.getRuntime()},{tot_assets}")
+        file.write(f"{req_time},{tot_assets}")
         file.close()
 
 

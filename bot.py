@@ -19,12 +19,18 @@ class Bot:
     def __init__(self) -> None:
         """Constructor"""
 
+        # checking that user provided enough launch parameters
         self.checkSys()
+
+        # assigning values from parameters through sys (terminal)
         self.start_time = time.time()
         self.init_balance = int(float(sys.argv[1]))
         self.stream_id = sys.argv[2]
         self.chart_refresh = int(sys.argv[3])
         self.ref_time = time.time()
+
+        # instantiating trade instance
+        self.pt = PaperTrade(self.init_balance)
 
 
 #===============================
@@ -35,17 +41,14 @@ class Bot:
     def run(self) -> None:
         """Initiates chat monitor and trading"""
 
-        # Instantiate paper trading instance
-        pt = PaperTrade(self.init_balance)
-
         # Instantiate chat pull
         chat = pytchat.create(video_id=self.stream_id)
 
         # Running to log
-        self.isRunning(pt)
+        self.isRunning(self.pt)
 
         # begin plot animation linked to instance's log
-        Plot(pt.anim_log).run()
+        Plot(self.pt.anim_log).run()
 
         # continuously evaluating new chat messages
         while ( chat.is_alive() ):
@@ -68,43 +71,31 @@ class Bot:
                     user = c.author.name
                     msg_time = c.datetime
 
-                    self.checkCommand(pt, command, ticker, user, msg_time)
+                    self.checkCommand(self.pt, command, ticker, user, msg_time)
             
             # add refresh and anim below
-            if len(pt.holdings.keys()) > 0:
-                self.ref_time = self.refreshTimer(self.ref_time, pt)
-
-
+            self.refreshAnimLog(self.pt)
+            
 
 #===============================
 #   STATUS AND ACCESSORS
 #===============================
 
 
-    # def getUptime(self, trade_instance: PaperTrade, time: str) -> str:
-    #     """Logs and returns uptime of bot from initialization"""
+    def refreshAnimLog(self, trade_instance: PaperTrade) -> float:
+        """Updates the animation log with new information each time this method is called"""
 
-    #     trade_instance.getUptime(time)
-
-
-    def refreshTimer(self, prev_time: float, trade_instance: PaperTrade) -> float:
-        curr_time = time.time()
-        if ( curr_time - prev_time ) > self.chart_refresh:
-            # call method to update log with total asset value
-            trade_instance.chartLog(curr_time)
-
-            # call animate method to read in new data to chart
-            # to be built
-            pass
-
-        # will pass current time back to become prev time when called again
-        return curr_time
+        # marks time the request to update was made to be passed to the trade instance
+        req_time = time.time()
+        
+        # call method to update log with total asset value at the requested time
+        trade_instance.chartLog(req_time)
 
 
     def checkSys(self) -> None:
         """Checks if user gave necessary arguments on launch"""
 
-        if len(sys.argv) < 3:
+        if len(sys.argv) < 4:
             print("Incorrect or insufficient arguments given. Try 'python bot.py <initial-cash> <stream-ID>'")
             quit()
 
@@ -123,6 +114,8 @@ class Bot:
 
 
     def checkCommand(self, trade_instance: PaperTrade, command: str, ticker: str, user: str, time: str) -> None:
+        """Checks each chat message for matching command and then handles instruction"""
+
         # if buy command
         if command == '!buy':
             trade_instance.buy(ticker, user, time)

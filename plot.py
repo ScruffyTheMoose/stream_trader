@@ -12,7 +12,7 @@ class Plot:
 
         self.fig = plt.figure()
         self.ax1 = self.fig.add_subplot(1,1,1)
-        self.file = anim_log
+        self.file = anim_log # the log reference will be an instance variable stored in trade instance
 
 
     def animate(self, i) -> None:
