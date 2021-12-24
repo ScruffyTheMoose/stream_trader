@@ -2,6 +2,7 @@ import pandas as pd
 import yahoo_fin.stock_info as si
 import time
 import datetime
+import logging
 
 
 class PaperTrade:
@@ -22,8 +23,6 @@ class PaperTrade:
         # Instance trade data
         self.init_balance = initial_balance
         self.balance = initial_balance
-        self.holdings_value = 0
-        self.pnl = 0
         self.holdings = {}
         self.order_count = 0
 
@@ -31,9 +30,7 @@ class PaperTrade:
         self.start_time = time.time()
 
         # Log file
-        self.log_file = f"log-{int(self.start_time)}.txt"
-        f = open(self.log_file, 'x')
-        f.close()
+        logging.basicConfig(filename=f"log-{int(self.start_time)}.log", encoding='utf-8', level=logging.INFO)
 
         # counts refresh iterations to allow for timing
         self.refresh_ctr = 0
@@ -77,7 +74,7 @@ class PaperTrade:
 
             # print to log
             console = f"""[{time}] -- {user} successfully purchased share of ${ticker.upper()} for ${price}"""
-            self.toLog(console)
+            logging.info(console)
 
 
         # produce balance error
@@ -120,7 +117,7 @@ class PaperTrade:
 
                 # print to log
                 console = f"""[{time}] -- {user} successfully sold share of ${ticker.upper()} for ${price}"""
-                self.toLog(console)
+                logging.info(console)
             
             # produce share count error
             else:
@@ -136,40 +133,15 @@ class PaperTrade:
 #===============================
 
 
-    # update the value of current holdings in this instance
-    def getValue(self) -> None:
-        """Determine the value of current holdings"""
-
-        # value to return
-        newValue = 0
-
-        # identifying current value of holdings by ticker
-        for ticker in self.holdings.keys():
-            shares = self.holdings[ticker]['shares']
-            price = si.get_live_price(ticker)
-            newValue += shares * price
-        
-        # assigning to value
-        self.holdings_value = newValue
-
-
-    # update the pnl tracker if this instance
-    def getpnl(self) -> None:
-        """Determine the Profit and Loss"""
-
-        # determine and assign PnL
-        self.pnl = (self.holdings_value + self.balance)- self.init_balance
-
-
     # output pnl to log
     def getUpdate(self, time: str) -> None:
         """Output the PnL to log/terminal"""
 
-        self.getValue()
-        self.getpnl()
-        console = f"""[{time}] -- Current Profit/Loss: ${self.pnl}"""
+        holdings_value = self.getLiveValue(self.holdings)
+        pnl = (holdings_value + self.balance) - self.init_balance
+        console = f"""[{time}] -- Current Profit/Loss: ${pnl}"""
 
-        self.toLog(console)
+        logging.info(console)
 
 
     def getHoldings(self, holdings: dict) -> None:
@@ -191,26 +163,12 @@ class PaperTrade:
         uptime = str(conversion)
         console = f"""[{msg_time}] -- Current uptime: {uptime}"""
 
-        self.toLog(console)
+        print(console)
 
     # Returns the uptime in seconds
-    def getRuntime(self) -> int:
+    def runtime(self) -> int:
         uptime_sec = int(time.time() - self.start_time)
         return uptime_sec
-
-
-    def toLog(self, item: str) -> None:
-        """Prints and Logs argument"""
-
-        print(item)
-        file = open(self.log_file, 'a')
-        file.write(item + " \n")
-        file.close()
-
-
-#===============================
-#   CHARTING
-#===============================
 
 
     def chartData(self) -> None:
@@ -218,13 +176,15 @@ class PaperTrade:
 
         # evaluating total value of combined cash and holdings
         tot_assets = round(self.balance + self.getLiveValue(self.holdings), 2)
-        minute = int(self.getRuntime() / 6)
+        minute = int(self.runtime() / 60)
 
         # to 2d list
         if self.chart_data[-1][0] == minute:
             self.chart_data[-1][1] = tot_assets
         else:
             self.chart_data.append([minute, tot_assets])
+
+        self.refresh_ctr += 1
 
 
     def getLiveValue(self, holdings: dict) -> float:
@@ -247,33 +207,33 @@ class PaperTrade:
     def balanceError(self, ticker: str, time: str) -> None:
         """Prints and Logs error if balance is not large enough to place order"""
 
-        console = f"[{time}] -- ### There is not a large enough balance to purchase ${ticker} ###"
-        self.toLog(console)
+        console = f"[{time}] -- There is not a large enough balance to purchase ${ticker}"
+        logging.error(console)
 
     
     def shareCountError(self, ticker: str, time: str) -> None:
         """Prints and Logs error if there are no shares to sell"""
 
-        console = f"[{time}] -- ### There are no remaining shares of ${ticker} to sell ###"
-        self.toLog(console)
+        console = f"[{time}] -- There are no remaining shares of ${ticker} to sell"
+        logging.error(console)
 
     
     def holdingsError(self, ticker: str, time: str) -> None:
         """Prints and Logs error if portfolio does not contains symbol"""
 
-        console = f"[{time}] -- ### There are no holdings of ${ticker} currently in the portfolio ###"
-        self.toLog(console)
+        console = f"[{time}] -- There are no holdings of ${ticker} currently in the portfolio"
+        logging.error(console)
 
 
     def commandError(self, time: str) -> None:
         """Prints and Logs if a command was received but is unable to be completed"""
 
-        console = f"[{time}] -- ### Incorrect command syntax, try: !buy ['ticker-symbol'] or !sell ['ticker-symbol'] ###"
-        self.toLog(console)
+        console = f"[{time}] -- Incorrect command syntax, try: !buy ['ticker-symbol'] or !sell ['ticker-symbol']"
+        logging.error(console)
 
 
     def notFound(self, ticker: str, time: str) -> None:
         """Prints and Logs error if order is placed for symbol that does not exist"""
 
-        console = f"[{time}] -- ### No pricing data found for ticker ${ticker} ###"
-        self.toLog(console)
+        console = f"[{time}] -- No pricing data found for ticker ${ticker}"
+        logging.error(console)

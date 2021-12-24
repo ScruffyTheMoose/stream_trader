@@ -3,7 +3,7 @@ from plot import Plot
 import pytchat
 import sys
 import time
-from multiprocessing import Process
+from multiprocessing import Process # to run bot and chart in parallel
 
 # test stream ID
 # joma livestream ID -> PY8f1Z3nARo
@@ -37,6 +37,7 @@ class Bot:
 #===============================
 
 
+    # main method to operate the bot
     def run(self) -> None:
         """Initiates chat monitor and trading"""
 
@@ -45,8 +46,6 @@ class Bot:
 
         # Running to log
         self.isRunning(self.pt)
-
-        k = 1
 
         # continuously evaluating new chat messages
         while ( chat.is_alive() ):
@@ -59,6 +58,7 @@ class Bot:
 
                     order = c.message.lower().split(' ')
                     
+                    # parsing out single and multi-string commands
                     try:
                         command = order[0]
                         ticker = order[1]
@@ -66,14 +66,15 @@ class Bot:
                         command = order[0]
                         ticker = 'N/A'
                     
+                    # parsing message information
                     user = c.author.name
                     msg_time = c.datetime
 
+                    # passing message details to the checkCommand() method to handle it
                     self.checkCommand(self.pt, command, ticker, user, msg_time)
             
             # adds updated information to the chart_data list
             self.pt.chartData()
-            print(self.pt.chart_data)
 
 
 #===============================
@@ -81,6 +82,7 @@ class Bot:
 #===============================
 
 
+    # ensures the user launched the app with the appropriate parameters
     def checkSys(self) -> None:
         """Checks if user gave necessary arguments on launch"""
 
@@ -89,6 +91,7 @@ class Bot:
             quit()
 
 
+    # initial validation that the bot is running and prints the initial arguments passed on launch to terminal
     def isRunning(self, trade_instance: PaperTrade) -> str:
         """Logs and returns initial data for bot"""
 
@@ -99,26 +102,30 @@ class Bot:
 
         """
         
-        trade_instance.toLog(stat)
+        print(stat)
 
 
+    # used to validate the commands that are being read from the live chat
     def checkCommand(self, trade_instance: PaperTrade, command: str, ticker: str, user: str, time: str) -> None:
         """Checks each chat message for matching command and then handles instruction"""
 
-        # if buy command
+        # catches buy command and passes to the trade instance
         if command == '!buy':
             trade_instance.buy(ticker, user, time)
 
-        # if sell command
+        # catches sell command and passes to the trade instance
         elif command == '!sell':
             trade_instance.sell(ticker, user, time)
 
+        # passes request to update on current portfio value to trade instance
         elif command == '!update':
             trade_instance.getUpdate(time)
 
+        # passes request for uptime update to log in date format
         elif command == '!uptime':
             trade_instance.getUptime(time)
 
+        # *currently* prints dataframe of holdings to terminal
         elif command == '!holdings':
             trade_instance.getHoldings(trade_instance.holdings)
 
