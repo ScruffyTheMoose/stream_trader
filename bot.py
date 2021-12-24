@@ -1,7 +1,9 @@
 from broker import PaperTrade # to initiate paper trading instance
+from plot import Plot
 import pytchat
 import sys
 import time
+from multiprocessing import Process
 
 # test stream ID
 # joma livestream ID -> PY8f1Z3nARo
@@ -27,6 +29,7 @@ class Bot:
 
         # instantiating trade instance
         self.pt = PaperTrade(self.init_balance)
+        self.chart = Plot(self.pt.chart_data)
 
 
 #===============================
@@ -37,14 +40,13 @@ class Bot:
     def run(self) -> None:
         """Initiates chat monitor and trading"""
 
-        # Instantiate chat pull
+        # Instantiate chat pull passing stream ID to constructor
         chat = pytchat.create(video_id=self.stream_id)
 
         # Running to log
         self.isRunning(self.pt)
 
-        # begin plot animation linked to instance's log
-        # Plot(self.pt.anim_log).run()
+        k = 1
 
         # continuously evaluating new chat messages
         while ( chat.is_alive() ):
@@ -69,23 +71,14 @@ class Bot:
 
                     self.checkCommand(self.pt, command, ticker, user, msg_time)
             
-            # add refresh and anim below
-            self.refreshAnimLog(self.pt)
+            # adds updated information to the chart_data list
+            self.pt.chartData()
+            print(self.pt.chart_data)
 
 
 #===============================
 #   STATUS AND ACCESSORS
 #===============================
-
-
-    def refreshAnimLog(self, trade_instance: PaperTrade) -> float:
-        """Updates the animation log with new information each time this method is called"""
-
-        # marks time the request to update was made to be passed to the trade instance
-        req_time = time.time()
-        
-        # call method to update log with total asset value at the requested time
-        trade_instance.chartLog(req_time)
 
 
     def checkSys(self) -> None:
@@ -141,4 +134,17 @@ class Bot:
 
 # main module check
 if __name__ == "__main__":
-    Bot().run()
+    
+    # creating a bot object to run different processes from
+    bot = Bot()
+
+    # assigning seperate process to charting interface
+    p = Process(target=bot.chart.run)
+    # starting process
+    p.start()
+
+    # calling run() method from bot.py to initiate trading
+    bot.run()
+
+    # joining the chart process after closing to the main process
+    p.join()

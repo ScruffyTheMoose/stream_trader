@@ -7,26 +7,22 @@ style.use('seaborn') # setting style for all instances
 class Plot:
 
 
-    def __init__(self, anim_log: str) -> None:
+    def __init__(self, chart_data: list) -> None:
         """Constuctor initializes figure and axis"""
 
         self.fig = plt.figure()
         self.ax1 = self.fig.add_subplot(1,1,1)
-        self.file = anim_log # the log reference will be an instance variable stored in trade instance
+        self.graph_data = chart_data # the log reference will be an instance variable stored in trade instance
 
 
     def animate(self, i) -> None:
         """Animation method to be passed into FuncAnimation"""
 
-        graph_data = open(self.file, 'r').read()
-        lines = graph_data.split("\n")
         xs = []
         ys = []
-        for line in lines:
-            if len(line) > 1:
-                x, y = line.split(',')
-                xs.append(x)
-                ys.append(y)
+        for pair in self.graph_data:
+            xs.append(pair[0])
+            ys.append(pair[1])
 
         self.ax1.clear()
         self.ax1.plot(xs, ys)
@@ -38,3 +34,6 @@ class Plot:
         # setting refresh time to 2500ms
         anim = animation.FuncAnimation(self.fig, self.animate, interval=2500)
         plt.show()
+
+    def showFinal(self):
+        plt.show

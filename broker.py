@@ -35,13 +35,12 @@ class PaperTrade:
         f = open(self.log_file, 'x')
         f.close()
 
-        # Animation log file
-        self.last_time = 0
+        # counts refresh iterations to allow for timing
+        self.refresh_ctr = 0
 
-        self.anim_log = f"anim-{int(self.start_time)}.txt"
-        f = open(self.anim_log, 'w')
-        f.write(f"0,{self.init_balance}" + '\n')
-        f.close()
+        # 2d list which contains ordered pairs of portfolio data to be plotted
+        # [minute, value]
+        self.chart_data = [[0, int(self.balance)]]
 
 
 #===============================
@@ -95,7 +94,7 @@ class PaperTrade:
 
             # checking that atleast 1 share currently owned
             # this check needs to be separate in order to prevent key error
-            if self.holdings[ticker]['shares'] > 1:
+            if self.holdings[ticker]['shares'] >= 1:
 
                 # getting current price
                 price = si.get_live_price(ticker)
@@ -214,18 +213,18 @@ class PaperTrade:
 #===============================
 
 
-    def chartLog(self, req_time: float) -> None:
+    def chartData(self) -> None:
         """Writes updated asset values to log file for animated plot"""
 
         # evaluating total value of combined cash and holdings
-        tot_assets = str(round(self.balance + self.getLiveValue(self.holdings), 2))
-        minute = int(self.getRuntime() / 60)
+        tot_assets = round(self.balance + self.getLiveValue(self.holdings), 2)
+        minute = int(self.getRuntime() / 6)
 
-        # writing
-        file = open(self.anim_log, 'a')
-        file.write(f"{minute},{tot_assets}" + '\n')
-        file.close()
-
+        # to 2d list
+        if self.chart_data[-1][0] == minute:
+            self.chart_data[-1][1] = tot_assets
+        else:
+            self.chart_data.append([minute, tot_assets])
 
 
     def getLiveValue(self, holdings: dict) -> float:
@@ -235,7 +234,7 @@ class PaperTrade:
         total = 0
         for company in holdings.keys():
             price = si.get_live_price(company)
-            count = holdings[company['shares']]
+            count = holdings[company]['shares']
             total += count * price
 
         return total
