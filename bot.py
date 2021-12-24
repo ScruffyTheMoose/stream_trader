@@ -138,6 +138,9 @@ class Bot:
 #   RUN
 #===============================
 
+# live charting is still not function at the moment
+# the chart will run as a seperate process, but is not pulling from the live updated date
+# need to use pool with main process so that the chart process can access the newly updated chart data
 
 # main module check
 if __name__ == "__main__":
