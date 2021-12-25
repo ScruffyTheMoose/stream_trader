@@ -16,7 +16,7 @@ class Bot:
 #===============================
 
 
-    def __init__(self) -> None:
+    def __init__(self, trade_instance: PaperTrade) -> None:
         """Constructor"""
 
         # checking that user provided enough launch parameters
@@ -24,11 +24,12 @@ class Bot:
 
         # assigning values from parameters through sys (terminal)
         self.start_time = time.time()
-        self.init_balance = int(float(sys.argv[1]))
-        self.stream_id = sys.argv[2]
+        
+        # ID of youtube live stream to track
+        self.stream_id = sys.argv[1]
 
         # instantiating trade instance
-        self.pt = PaperTrade(self.init_balance)
+        self.pt = trade_instance
         self.chart = Plot(self.pt.chart_data)
 
 
@@ -86,8 +87,8 @@ class Bot:
     def checkSys(self) -> None:
         """Checks if user gave necessary arguments on launch"""
 
-        if len(sys.argv) < 3:
-            print("Incorrect or insufficient arguments given. Try 'python bot.py <initial-cash> <stream-ID>'")
+        if len(sys.argv) < 2:
+            print("Incorrect or insufficient arguments given. Try 'python bot.py <stream-ID>'")
             quit()
 
 
