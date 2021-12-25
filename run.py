@@ -3,6 +3,12 @@ from broker import PaperTrade
 from plot import Plot
 from multiprocessing import Process
 
+
+#===============================
+#   RUN
+#===============================
+
+
 if __name__ == '__main__':
     
     # instantiate trade instance
@@ -15,8 +21,8 @@ if __name__ == '__main__':
     plot = Plot(ti.chart_data)
 
     # Creating individual processes for both plot and bot
-    p1 = Process(target=bot.run)
-    p2 = Process(target=plot.run)
+    p1 = Process(target=plot.run)
+    p2 = Process(target=bot.run)
 
     # starting processes
     p1.start()

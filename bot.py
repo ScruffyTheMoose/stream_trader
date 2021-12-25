@@ -30,7 +30,6 @@ class Bot:
 
         # instantiating trade instance
         self.pt = trade_instance
-        self.chart = Plot(self.pt.chart_data)
 
 
 #===============================
@@ -84,11 +83,13 @@ class Bot:
 
 
     # ensures the user launched the app with the appropriate parameters
-    def checkSys(self) -> None:
+    def checkSys(self, trade_instance: PaperTrade) -> None:
         """Checks if user gave necessary arguments on launch"""
 
         if len(sys.argv) < 2:
-            print("Incorrect or insufficient arguments given. Try 'python bot.py <stream-ID>'")
+            console = "Incorrect or insufficient arguments given. Try 'python bot.py <stream-ID>'"
+            print(console)
+            trade_instance.logError(console)
             quit()
 
 
@@ -104,6 +105,7 @@ class Bot:
         """
         
         print(stat)
+        trade_instance.logInfo(stat)
 
 
     # used to validate the commands that are being read from the live chat
@@ -143,19 +145,19 @@ class Bot:
 # the chart will run as a seperate process, but is not pulling from the live updated date
 # need to use pool with main process so that the chart process can access the newly updated chart data
 
-# main module check
-if __name__ == "__main__":
+# # main module check
+# if __name__ == "__main__":
     
-    # creating a bot object to run different processes from
-    bot = Bot()
+#     # creating a bot object to run different processes from
+#     bot = Bot()
 
-    # assigning seperate process to charting interface
-    p = Process(target=bot.chart.run)
-    # starting process
-    p.start()
+#     # assigning seperate process to charting interface
+#     p = Process(target=bot.chart.run)
+#     # starting process
+#     p.start()
 
-    # calling run() method from bot.py to initiate trading
-    bot.run()
+#     # calling run() method from bot.py to initiate trading
+#     bot.run()
 
-    # joining the chart process after closing to the main process
-    p.join()
+#     # joining the chart process after closing to the main process
+#     p.join()

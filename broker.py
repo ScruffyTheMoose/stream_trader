@@ -1,3 +1,4 @@
+from os import times_result
 import pandas as pd
 import yahoo_fin.stock_info as si
 import time
@@ -141,6 +142,7 @@ class PaperTrade:
         pnl = (holdings_value + self.balance) - self.init_balance
         console = f"""[{time}] -- Current Profit/Loss: ${pnl}"""
 
+        print(console)
         logging.info(console)
 
 
@@ -150,8 +152,11 @@ class PaperTrade:
         # Cloning current holdings to append with current
         stats = pd.DataFrame(holdings)
 
+        # convert to dataframe
         df = pd.DataFrame(self.holdings)
+        
         print(df)
+        logging.info(df)
 
 
     # Logs the uptime in date format
@@ -164,10 +169,14 @@ class PaperTrade:
         console = f"""[{msg_time}] -- Current uptime: {uptime}"""
 
         print(console)
+        logging.info(console)
 
     # Returns the uptime in seconds
     def runtime(self) -> int:
+        """Evaluates and returns the runtime of the trade instance measured in seconds"""
+
         uptime_sec = int(time.time() - self.start_time)
+        
         return uptime_sec
 
 
@@ -198,7 +207,25 @@ class PaperTrade:
             total += count * price
 
         return total
-    
+
+
+#===============================
+#   LOGGING
+#===============================
+
+
+    def logInfo(self, text: str) -> None:
+        """For logging info outside of module"""
+
+        logging.info(text)
+
+
+    def logError(self, text: str) -> None:
+        """For logging errors outside of module"""
+
+        logging.error(text)
+
+
 #===============================
 #   ERRORS
 #===============================
