@@ -19,9 +19,6 @@ class Bot:
     def __init__(self, trade_instance: PaperTrade) -> None:
         """Constructor"""
 
-        # checking that user provided enough launch parameters
-        self.checkSys()
-
         # assigning values from parameters through sys (terminal)
         self.start_time = time.time()
         
@@ -30,6 +27,9 @@ class Bot:
 
         # instantiating trade instance
         self.pt = trade_instance
+
+        # checking that user provided enough launch parameters
+        self.checkSys(self.pt)
 
 
 #===============================
