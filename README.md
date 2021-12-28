@@ -56,7 +56,7 @@ None of the commands are case sensitive. There are a series of code blocks to ca
 !uptime
 ```
 ```
-[HH:MM:SS] -- Current uptime: HH:MM:SS
+[HH:MM:SS] -- Current uptime: HH:MM:SS // the time in [square braces] is the time of the log, the uptime is the running time of the bot
 ```
 
 ## Errors
