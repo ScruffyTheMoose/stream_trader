@@ -14,8 +14,7 @@ All operations completed by the bot will be saved to a .log file.
 * List of key features
 
 ### Installation
-*pip coming soon*
-Currently, you can fork this repo and install all dependencies through the pipfile.
+You can fork this repo and install all dependencies through the pipfile when operating in the directory.
 ```
 pipenv install
 ```
@@ -35,7 +34,7 @@ None of the commands are case sensitive. There are a series of code blocks to ca
 ```
 [HH:MM:SS] -- <user> successfully purchased share of $AAPL for $155.47
 ```
---
+
 * Sell a share
 ```
 !sell ['ticker-symbol']
@@ -43,7 +42,7 @@ None of the commands are case sensitive. There are a series of code blocks to ca
 ```
 [HH:MM:SS] -- <user> successfully sold share of $AAPL for $127.86
 ```
---
+
 * Check updated PnL
 ```
 !update
@@ -51,7 +50,7 @@ None of the commands are case sensitive. There are a series of code blocks to ca
 ```
 [HH:MM:SS] -- Current Profit/Loss: $88977.24
 ```
---
+
 * Bot Uptime
 ```
 !uptime
