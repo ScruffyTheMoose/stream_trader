@@ -22,7 +22,7 @@ pipenv install
 
 ### Launch
 ```
-pipenv run python bot.py <stream-id>
+pipenv run python run.py <stream-id>
 ```
 
 ## Live Chat Commands
