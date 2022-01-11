@@ -9,19 +9,11 @@ This bot was inspired by Joma's video allowing users in his live chat to trade b
 All operations completed by the bot will be saved to a .log file.
 
 ### To Be Built
-* Live updating chart and table that will provide users/chatters with easy to read data regarding the status of the bot
-* Installation through pip and ~~instructions for install~~
 * List of key features
-
-### Installation
-You can fork this repo and install all dependencies through the pipfile when operating in the directory.
-```
-pipenv install
-```
 
 ### Launch
 ```
-pipenv run python run.py <stream-id>
+python run.py <stream-id>
 ```
 
 ## Live Chat Commands
