@@ -8,9 +8,6 @@ This bot was inspired by Joma's video allowing users in his live chat to trade b
 
 All operations completed by the bot will be saved to a .log file.
 
-### To Be Built
-* List of key features
-
 ### Launch
 ```
 python run.py <stream-id>
